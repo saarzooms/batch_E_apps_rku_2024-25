@@ -5,6 +5,13 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+      ),
+      body: Container(
+        child: Text('Nothing to display'),
+      ),
+    );
   }
 }
