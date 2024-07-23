@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dashboard_screen.dart';
 
@@ -47,11 +48,14 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               print(
                   'button clicked ${unmController.text} ${pwdController.text}');
               if (unmController.text == pwdController.text) {
                 print('Welcome ${unmController.text}');
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                await prefs.setString('uname', unmController.text);
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => DashboardScreen(),
