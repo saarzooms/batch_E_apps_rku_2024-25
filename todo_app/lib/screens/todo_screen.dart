@@ -51,7 +51,10 @@ class _TodoScreenState extends State<TodoScreen> {
               child: ListView.builder(
                 itemCount: tasks.length,
                 itemBuilder: (context, index) => CheckboxListTile(
-                  onChanged: (v) {},
+                  onChanged: (v) {
+                    tasks[index]["isCompleted"] = v;
+                    setState(() {});
+                  },
                   controlAffinity: ListTileControlAffinity.leading,
                   value: tasks[index]["isCompleted"],
                   title: Text(tasks[index]["title"]),
