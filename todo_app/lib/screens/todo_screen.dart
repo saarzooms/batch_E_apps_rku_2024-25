@@ -34,7 +34,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     //todo add logic to add/update task
                     if (txtTitle.text.isNotEmpty) {
                       tasks.add({
-                        "id": 123456,
+                        "id": DateTime.now().millisecondsSinceEpoch,
                         "title": txtTitle.text,
                         "isCompleted": false
                       });
@@ -57,7 +57,17 @@ class _TodoScreenState extends State<TodoScreen> {
                   },
                   controlAffinity: ListTileControlAffinity.leading,
                   value: tasks[index]["isCompleted"],
-                  title: Text(tasks[index]["title"]),
+                  title: Text(
+                    "${tasks[index]["title"]} ${tasks[index]["id"]}",
+                    style: TextStyle(
+                      decoration: tasks[index]["isCompleted"]
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      color: tasks[index]["isCompleted"]
+                          ? Colors.red
+                          : Colors.black,
+                    ),
+                  ),
                   secondary: SizedBox(
                     width: 80,
                     child: Row(
