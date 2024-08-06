@@ -73,11 +73,17 @@ class _TodoScreenState extends State<TodoScreen> {
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            //logic for edit
+                          },
                           icon: Icon(Icons.edit),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            //logic for delete
+                            tasks.removeAt(index);
+                            setState(() {});
+                          },
                           icon: Icon(Icons.delete),
                         ),
                       ],
