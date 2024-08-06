@@ -45,9 +45,9 @@ class _GSTCalcScreenState extends State<GSTCalcScreen> {
                 labelText: 'GST Per',
               ),
             ),
-            Text('IGST ${igst}'),
-            Text('CGST ${cgst}'),
-            Text('SGST ${sgst}'),
+            Text('IGST ${igst.toStringAsFixed(2)}'),
+            Text('CGST ${cgst.toStringAsFixed(2)}'),
+            Text('SGST ${sgst.toStringAsFixed(2)}'),
             TextField(
               controller: txtTotalAmnt,
               decoration: InputDecoration(
@@ -57,15 +57,27 @@ class _GSTCalcScreenState extends State<GSTCalcScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (txtAmnt.text.isNotEmpty && txtPer.text.isNotEmpty) {
-                  igst = double.parse(txtAmnt.text) *
-                      double.parse(txtPer.text) *
-                      0.01;
-                  cgst = igst * 0.5;
-                  sgst = cgst;
-                  txtTotalAmnt.text =
-                      (double.parse(txtAmnt.text) + igst).toString();
-                  setState(() {});
+                if (isReverse) {
+                  if (txtTotalAmnt.text.isNotEmpty && txtPer.text.isNotEmpty) {
+                    var amnt = double.parse(txtTotalAmnt.text) /
+                        (1 + (double.parse(txtPer.text) * 0.01));
+                    igst = amnt * double.parse(txtPer.text) * 0.01;
+                    cgst = igst * 0.5;
+                    sgst = cgst;
+                    txtAmnt.text = amnt.toString();
+                    setState(() {});
+                  }
+                } else {
+                  if (txtAmnt.text.isNotEmpty && txtPer.text.isNotEmpty) {
+                    igst = double.parse(txtAmnt.text) *
+                        double.parse(txtPer.text) *
+                        0.01;
+                    cgst = igst * 0.5;
+                    sgst = cgst;
+                    txtTotalAmnt.text =
+                        (double.parse(txtAmnt.text) + igst).toString();
+                    setState(() {});
+                  }
                 }
               },
               child: Text('Calculate'),
