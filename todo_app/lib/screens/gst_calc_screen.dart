@@ -14,6 +14,7 @@ class _GSTCalcScreenState extends State<GSTCalcScreen> {
   double igst = 0;
   double sgst = 0;
   double cgst = 0;
+  bool isReverse = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +23,14 @@ class _GSTCalcScreenState extends State<GSTCalcScreen> {
         ),
         body: Column(
           children: [
+            SwitchListTile(
+              value: isReverse,
+              onChanged: (v) {
+                isReverse = v;
+                setState(() {});
+              },
+              title: Text('isReverse'),
+            ),
             TextField(
               controller: txtAmnt,
               decoration: InputDecoration(
@@ -47,7 +56,18 @@ class _GSTCalcScreenState extends State<GSTCalcScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (txtAmnt.text.isNotEmpty && txtPer.text.isNotEmpty) {
+                  igst = double.parse(txtAmnt.text) *
+                      double.parse(txtPer.text) *
+                      0.01;
+                  cgst = igst * 0.5;
+                  sgst = cgst;
+                  txtTotalAmnt.text =
+                      (double.parse(txtAmnt.text) + igst).toString();
+                  setState(() {});
+                }
+              },
               child: Text('Calculate'),
             ),
           ],
