@@ -48,10 +48,14 @@ class _TodoScreenState extends State<TodoScreen> {
                     //todo add logic to add/update task
                     if (txtTitle.text.isNotEmpty) {
                       if (selId == 0) {
-                        tasks.add(Todo(
-                            id: DateTime.now().millisecondsSinceEpoch,
-                            task: txtTitle.text,
-                            completed: false));
+                        APICalls.addTask({
+                          "id": DateTime.now().millisecondsSinceEpoch,
+                          "task": txtTitle.text
+                        });
+                        // tasks.add(Todo(
+                        //     id: DateTime.now().millisecondsSinceEpoch,
+                        //     task: txtTitle.text,
+                        //     completed: false));
                       } else {
                         var idx =
                             tasks.indexWhere((element) => element.id == selId);
@@ -65,6 +69,7 @@ class _TodoScreenState extends State<TodoScreen> {
                       txtTitle.clear();
                     }
                     setState(() {});
+                    fetchData();
                   },
                   icon: Icon(Icons.add),
                 ),
