@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'screens/color_pattern_screen.dart';
 import 'screens/gst_calc_screen.dart';
+import 'screens/quote_screen.dart';
 import 'screens/todo_screen.dart';
 
 void main() {
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: TodoScreen(),
+      home: QuoteScreen(),
     );
   }
 }

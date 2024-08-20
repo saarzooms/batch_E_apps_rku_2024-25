@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../models/quote.dart';
 import '../models/todo.dart';
 
 class APICalls {
@@ -36,5 +37,22 @@ class APICalls {
     } else {
       print(response.reasonPhrase);
     }
+  }
+
+  static fetchQuote() async {
+    List<Quote> quote = [];
+    var request =
+        http.Request('GET', Uri.parse('https://zenquotes.io/api/random'));
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var resp = await response.stream.bytesToString();
+      print(resp);
+      quote = quoteFromJson(resp);
+    } else {
+      print(response.reasonPhrase);
+    }
+    return quote;
   }
 }
