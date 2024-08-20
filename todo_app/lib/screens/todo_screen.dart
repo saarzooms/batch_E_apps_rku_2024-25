@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../models/todo.dart';
+import '../services/api_calls.dart';
+
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
 
@@ -8,11 +11,21 @@ class TodoScreen extends StatefulWidget {
 }
 
 class _TodoScreenState extends State<TodoScreen> {
-  List tasks = [
-    {"id": 123456, "title": "Buy iPhone", "isCompleted": false}
-  ];
+  List<Todo> tasks = [];
   int selId = 0;
   TextEditingController txtTitle = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  fetchData() async {
+    tasks = await APICalls.fetchTasks();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,16 +48,15 @@ class _TodoScreenState extends State<TodoScreen> {
                     //todo add logic to add/update task
                     if (txtTitle.text.isNotEmpty) {
                       if (selId == 0) {
-                        tasks.add({
-                          "id": DateTime.now().millisecondsSinceEpoch,
-                          "title": txtTitle.text,
-                          "isCompleted": false
-                        });
+                        tasks.add(Todo(
+                            id: DateTime.now().millisecondsSinceEpoch,
+                            task: txtTitle.text,
+                            completed: false));
                       } else {
-                        var idx = tasks
-                            .indexWhere((element) => element['id'] == selId);
+                        var idx =
+                            tasks.indexWhere((element) => element.id == selId);
                         var task = tasks[idx];
-                        task['title'] = txtTitle.text;
+                        task.task = txtTitle.text;
                         tasks.removeAt(idx);
                         tasks.insert(idx, task);
                         selId = 0;
@@ -60,52 +72,54 @@ class _TodoScreenState extends State<TodoScreen> {
             ),
             //to display the list
             Expanded(
-              child: ListView.builder(
-                itemCount: tasks.length,
-                itemBuilder: (context, index) => CheckboxListTile(
-                  onChanged: (v) {
-                    tasks[index]["isCompleted"] = v;
-                    setState(() {});
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
-                  value: tasks[index]["isCompleted"],
-                  title: Text(
-                    "${tasks[index]["title"]} ${tasks[index]["id"]}",
-                    style: TextStyle(
-                      decoration: tasks[index]["isCompleted"]
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                      color: tasks[index]["isCompleted"]
-                          ? Colors.red
-                          : Colors.black,
-                    ),
-                  ),
-                  secondary: SizedBox(
-                    width: 80,
-                    child: Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            //logic for edit
-                            txtTitle.text = tasks[index]["title"];
-                            selId = tasks[index]["id"];
-                            setState(() {});
-                          },
-                          icon: Icon(Icons.edit),
+              child: tasks.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) => CheckboxListTile(
+                        onChanged: (v) {
+                          tasks[index].completed = v;
+                          setState(() {});
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value: tasks[index].completed,
+                        title: Text(
+                          "${tasks[index].task} ${tasks[index].id}",
+                          style: TextStyle(
+                            decoration: tasks[index].completed!
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            color: tasks[index].completed!
+                                ? Colors.red
+                                : Colors.black,
+                          ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            //logic for delete
-                            tasks.removeAt(index);
-                            setState(() {});
-                          },
-                          icon: Icon(Icons.delete),
+                        secondary: SizedBox(
+                          width: 100,
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  //logic for edit
+                                  txtTitle.text = tasks[index].task!;
+                                  selId = tasks[index].id!;
+                                  setState(() {});
+                                },
+                                icon: Icon(Icons.edit),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  //logic for delete
+                                  tasks.removeAt(index);
+                                  setState(() {});
+                                },
+                                icon: Icon(Icons.delete),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                      ),
+                    )
+                  : Center(child: CircularProgressIndicator()),
             )
           ],
         ));
