@@ -16,16 +16,14 @@ class CounterPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GetBuilder(
-                  init: CounterController(),
-                  builder: (controller) {
-                    return Text(
-                      controller.count.toString(),
-                      style: TextStyle(
-                        fontSize: 40,
-                      ),
-                    );
-                  }),
+              Obx(() {
+                return Text(
+                  controller.count.toString(),
+                  style: TextStyle(
+                    fontSize: 40,
+                  ),
+                );
+              }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -39,7 +37,11 @@ class CounterPage extends StatelessWidget {
                         controller.dec();
                       },
                       icon: Icon(Icons.remove)),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
+                  IconButton(
+                      onPressed: () {
+                        controller.reset();
+                      },
+                      icon: Icon(Icons.refresh)),
                 ],
               )
             ],

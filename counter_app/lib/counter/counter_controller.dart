@@ -1,19 +1,16 @@
 import 'package:get/get.dart';
 
 class CounterController extends GetxController {
-  int count = 0;
+  var count = 0.obs;
   inc() {
-    count++;
-    update();
+    count.value += 1;
   }
 
   dec() {
-    --count;
-    update();
+    if (count.value > 0) count.value -= 1;
   }
 
   reset() {
-    count = 0;
-    update();
+    count.value = 0;
   }
 }
